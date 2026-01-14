@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  react-app:
+    image: docker-react-app:v1
+    container_name: react-app
+    ports:
+      - "3000:5173"     # host:container
+    depends_on:
+      - db
+    environment:
+      - REACT_APP_DB_HOST=db
+      - REACT_APP_DB_USER=root
+      - REACT_APP_DB_PASSWORD=rootpassword
+      - REACT_APP_DB_NAME=mydb
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+
+  db:
+    image: mysql:8
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydb
+    ports:
+      - "3306:3306"
